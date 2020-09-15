@@ -278,21 +278,21 @@ class KLibRegexDslTests {
     fun `Email regex`() {
         // Note: this is of course a very naive implementation of an email regex
 
-        val localPart = UnionCharacterClass(
-            RangeCharacterClass('a'..'z'),
-            RangeCharacterClass('A'..'Z'),
-            RangeCharacterClass('0'..'9'),
-            SimpleCharacterClass('.', '+', '-'),
+        val localPart = union(
+            characterClass('a'..'z'),
+            characterClass('A'..'Z'),
+            characterClass('0'..'9'),
+            characterClass('.', '+', '-'),
         ).repeated(1..255)
 
         val at = Characters("@")
 
-        val domain = IntersectionCharacterClass(
-            UnionCharacterClass(
+        val domain = intersection(
+            union(
                 AlphanumericCharacter,
-                SimpleCharacterClass('.', '-'),
+                characterClass('.', '-'),
             ),
-            NegationCharacterClass(SimpleCharacterClass('@'))
+            negation(characterClass('@'))
         ).oneOrMoreTimes()
 
         val tld = Group(
@@ -331,18 +331,18 @@ class KLibRegexDslTests {
             Either(
                 Sequence(
                     Characters("0").onceOrNotAtAll(),
-                    RangeCharacterClass('1'..'9'),
+                    characterClass('1'..'9'),
                 ),
                 Sequence(
                     Characters("1"),
-                    RangeCharacterClass('0'..'2'),
+                    characterClass('0'..'2'),
                 )
             )
         )
         val separator = Characters(":")
         val minutes = Sequence(
-            RangeCharacterClass('0'..'5'),
-            RangeCharacterClass('0'..'9'),
+            characterClass('0'..'5'),
+            characterClass('0'..'9'),
         )
 
         val timeRegex = Sequence(

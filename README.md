@@ -4,7 +4,7 @@ A tiny Regex DSL library for Kotlin Multiplatform.
 
 ## Why
 
-[Regular expressions](https://en.wikipedia.org/wiki/Regular_expression) are a powerful tool, but a bit of a nightmare to read/maintain. In fact, they're not easy to write either: the syntax is not always intuitive or easy to remember, and it's quite easy to make mistakes - which will typically be detected at run-time only.
+[Regular expressions](https://en.wikipedia.org/wiki/Regular_expression) are a powerful tool, but a bit of a nightmare to read and maintain.  In fact, they aren't ideal to write either: the syntax is not always intuitive or simple to remember, and it's quite easy to make mistakes - which will typically be detected at run-time only.
 
 Using a DSL instead fixes these issues (albeit at the cost of verbosity - but as Kotlin developers, we like verbose, don't we?)
 
@@ -19,18 +19,18 @@ val hours = Group(
     Either(
         Sequence(
             Characters("0").onceOrNotAtAll(),
-            RangeCharacterClass('1'..'9'),
+            characterClass('1'..'9'),
         ),
         Sequence(
             Characters("1"),
-            RangeCharacterClass('0'..'2'),
+            characterClass('0'..'2'),
         )
     )
 )
 val separator = Characters(":")
 val minutes = Sequence(
-    RangeCharacterClass('0'..'5'),
-    RangeCharacterClass('0'..'9'),
+    characterClass('0'..'5'),
+    characterClass('0'..'9'),
 )
 
 val timeRegex = Sequence(
@@ -68,21 +68,21 @@ The API is pretty self-explanatory so here's an example:
 
 // Note: this is of course a very naive implementation of an email regex
 
-val localPart = UnionCharacterClass(
-    RangeCharacterClass('a'..'z'),
-    RangeCharacterClass('A'..'Z'),
-    RangeCharacterClass('0'..'9'),
-    SimpleCharacterClass('.', '+', '-'),
+val localPart = union(
+    characterClass('a'..'z'),
+    characterClass('A'..'Z'),
+    characterClass('0'..'9'),
+    characterClass('.', '+', '-'),
 ).repeated(1..255)
 
 val at = Characters("@")
 
-val domain = IntersectionCharacterClass(
-    UnionCharacterClass(
+val domain = intersection(
+    union(
         AlphanumericCharacter,
-        SimpleCharacterClass('.', '-'),
+        characterClass('.', '-'),
     ),
-    NegationCharacterClass(SimpleCharacterClass('@'))
+    negation(characterClass('@'))
 ).oneOrMoreTimes()
 
 val tld = Group(

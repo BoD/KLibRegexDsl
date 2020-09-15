@@ -37,22 +37,37 @@ class SimpleCharacterClass(private vararg val allowedCharacters: Char) : Charact
         allowedCharacters.joinToString(separator = "") { if (it == '-') "\\-" else it.toString() }
 }
 
+fun characterClass(vararg allowedCharacters: Char): CharacterClass = SimpleCharacterClass(*allowedCharacters)
+
+
 class NegationCharacterClass(private val characterClass: CharacterClass) : CharacterClass() {
     override fun rangeString() = characterClass.rangeString()
     override fun toString() = "[^${rangeString()}]"
 }
 
+fun negation(characterClass: CharacterClass): CharacterClass = NegationCharacterClass(characterClass)
+
+
 class RangeCharacterClass(private val range: CharRange) : CharacterClass() {
     override fun rangeString() = "${range.first}-${range.last}"
 }
+
+fun characterClass(range: CharRange): CharacterClass = RangeCharacterClass(range)
+
 
 class UnionCharacterClass(private vararg val characterClasses: CharacterClass) : CharacterClass() {
     override fun rangeString() = characterClasses.joinToString(separator = "") { it.rangeString() }
 }
 
+fun union(vararg characterClasses: CharacterClass): CharacterClass = UnionCharacterClass(*characterClasses)
+
+
 class IntersectionCharacterClass(private vararg val characterClasses: CharacterClass) : CharacterClass() {
     override fun rangeString() = characterClasses.joinToString(separator = "&&")
 }
+
+fun intersection(vararg characterClasses: CharacterClass): CharacterClass =
+    IntersectionCharacterClass(*characterClasses)
 
 // endregion
 
