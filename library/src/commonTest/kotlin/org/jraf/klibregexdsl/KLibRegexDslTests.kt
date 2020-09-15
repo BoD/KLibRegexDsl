@@ -315,7 +315,7 @@ class KLibRegexDslTests {
             "[a-zA-Z0-9.+\\-]{1,255}@[[\\p{Alnum}.\\-]&&[^@]]+(\\Q.com\\E|\\Q.net\\E|\\Q.edu\\E|\\Q.org\\E)"
         )
 
-        val emailRegex = emailRegexNode.toRegex()
+        val emailRegex: Regex = emailRegexNode.toRegex()
 
         assertTrue(emailRegex.matches("a@a.com"))
         assertTrue(emailRegex.matches("ab@cd.com"))
@@ -323,6 +323,35 @@ class KLibRegexDslTests {
         assertTrue(emailRegex.matches("te.st-foo+04@example.net"))
         assertTrue(emailRegex.matches("te.st-foo+04@testo65.example.net"))
         assertFalse(emailRegex.matches("te.st-foo+04@testo65.ex@mple.net"))
+    }
+
+    @Test
+    fun `Time regex`() {
+        val hours = Group(
+            Either(
+                Sequence(
+                    Characters("0").onceOrNotAtAll(),
+                    RangeCharacterClass('1'..'9'),
+                ),
+                Sequence(
+                    Characters("1"),
+                    RangeCharacterClass('0'..'2'),
+                )
+            )
+        )
+        val separator = Characters(":")
+        val minutes = Sequence(
+            RangeCharacterClass('0'..'5'),
+            RangeCharacterClass('0'..'9'),
+        )
+
+        val timeRegex = Sequence(
+            hours,
+            separator,
+            minutes
+        )
+
+        assertToString(timeRegex, "(0?[1-9]|1[0-2]):[0-5][0-9]")
     }
 }
 

@@ -1,6 +1,49 @@
 # KLibRegexDsl
 
-This is a tiny Regex DSL library for Kotlin Multiplatform.
+A tiny Regex DSL library for Kotlin Multiplatform.
+
+## Why
+
+[Regular expressions](https://en.wikipedia.org/wiki/Regular_expression) are a powerful tool, but a bit of a nightmare to read/maintain. In fact, they're not easy to write either: the syntax is not always intuitive or easy to remember, and it's quite easy to make mistakes - which will typically be detected at run-time only.
+
+Using a DSL instead fixes these issues (albeit at the cost of verbosity - but as Kotlin developers, we like verbose, don't we?)
+
+As an illustration, compare these two ways to express _"Time Format HH:MM 12-hour, optional leading 0"_:
+
+```regexp
+(0?[1-9]|1[0-2]]):[0-5][0-9]
+```
+vs
+```kotlin
+val hours = Group(
+    Either(
+        Sequence(
+            Characters("0").onceOrNotAtAll(),
+            RangeCharacterClass('1'..'9'),
+        ),
+        Sequence(
+            Characters("1"),
+            RangeCharacterClass('0'..'2'),
+        )
+    )
+)
+val separator = Characters(":")
+val minutes = Sequence(
+    RangeCharacterClass('0'..'5'),
+    RangeCharacterClass('0'..'9'),
+)
+
+val timeRegex = Sequence(
+    hours,
+    separator,
+    minutes
+)
+```
+Which one is easier to read?
+
+Fooled you - the first one isn't even valid (duplicated bracket)! You may have missed it, but I don't blame you: it _is_ easy to miss.
+
+If that convinced you, continue reading.
 
 ## Usage
 ### 1/ Add the dependencies to your project
@@ -59,7 +102,7 @@ val emailRegexNode = Sequence(
 
 // emailRegexNode.toString() = "[a-zA-Z0-9.+\\-]{1,255}@[[\\p{Alnum}.\\-]&&[^@]]+(\\Q.com\\E|\\Q.net\\E|\\Q.edu\\E|\\Q.org\\E)"
 
-val emailRegex: Regeex = emailRegexNode.toRegex()
+val emailRegex: Regex = emailRegexNode.toRegex()
 
 ```
 
