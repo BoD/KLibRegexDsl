@@ -27,6 +27,11 @@ package org.jraf.klibregexdsl
 
 // region Character classes
 
+private val NEED_ESCAPE_CHARACTERS = setOf('-', ']', '\\')
+
+private val Char.escapeIfNeeded: String
+    get() = if (this in NEED_ESCAPE_CHARACTERS) "\\$this" else this.toString()
+
 abstract class CharacterClass : RegexNode() {
     abstract fun rangeString(): String
     override fun toString() = "[${rangeString()}]"
@@ -34,7 +39,7 @@ abstract class CharacterClass : RegexNode() {
 
 class SimpleCharacterClass(private vararg val allowedCharacters: Char) : CharacterClass() {
     override fun rangeString() =
-        allowedCharacters.joinToString(separator = "") { if (it == '-') "\\-" else it.toString() }
+        allowedCharacters.joinToString(separator = "") { it.escapeIfNeeded }
 }
 
 fun characterClass(vararg allowedCharacters: Char): CharacterClass = SimpleCharacterClass(*allowedCharacters)

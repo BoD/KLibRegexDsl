@@ -1,10 +1,9 @@
 plugins {
-    kotlin("jvm") version Versions.KOTLIN
+    kotlin("jvm")
 }
 
 apply(plugin = "java")
 
 dependencies {
-    implementation(kotlin("stdlib", Versions.KOTLIN))
-    implementation(project(":library"))
+    implementation(project(":klibregexdsl"))
 }

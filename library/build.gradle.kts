@@ -1,5 +1,6 @@
 plugins {
-    kotlin("multiplatform") version Versions.KOTLIN
+    kotlin("multiplatform")
+    `maven-publish`
 }
 
 group = "org.jraf"
@@ -8,14 +9,12 @@ description = "KLibRegexDsl"
 
 kotlin {
     jvm()
+    js(IR) {
+        browser()
+        nodejs()
+    }
 
     sourceSets {
-        val commonMain by getting {
-            dependencies {
-                implementation(kotlin("stdlib"))
-            }
-        }
-
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test-common"))
@@ -31,3 +30,6 @@ kotlin {
         }
     }
 }
+
+// Run `./gradlew refreshVersions` to update dependencies
+// Run `./gradlew publishToMavenLocal` to publish to the local maven repo

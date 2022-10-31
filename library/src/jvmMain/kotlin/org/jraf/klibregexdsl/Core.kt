@@ -7,7 +7,7 @@
  *                              /___/
  * repository.
  *
- * Copyright (C) 2020-present Benoit 'BoD' Lubek (BoD@JRAF.org)
+ * Copyright (C) 2022-present Benoit 'BoD' Lubek (BoD@JRAF.org)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,17 +24,6 @@
 
 package org.jraf.klibregexdsl
 
-abstract class RegexNode {
-    fun toRegex(): Regex = Regex(toString())
+internal actual fun String.escapeForRegex(): String {
+    return "\\Q$this\\E"
 }
-
-class Characters(private val characters: String) : RegexNode() {
-    override fun toString() =
-        if (characters.any { it in "\\.[]{}()<>*+-=!?^\$|" }) characters.escapeForRegex() else characters
-}
-
-class Raw(private val rawRegexp: String) : RegexNode() {
-    override fun toString() = rawRegexp
-}
-
-internal expect fun String.escapeForRegex(): String
