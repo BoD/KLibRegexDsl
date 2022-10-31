@@ -48,15 +48,14 @@ If that convinced you, continue reading.
 ## Usage
 ### 1/ Add the dependencies to your project
 
-**TODO!  This is not actually published yet!**
-
-```groovy
+```kotlin
 dependencies {
     /* ... */
-    implementation 'org.jraf:klibregexdsl:1.0.0'
+    implementation("org.jraf:klibregexdsl:1.0.0")
 }
 ```
-_(The artifact is hosted on jcenter)_
+
+_(The artifact is hosted on Maven Central)_
 
 
 
