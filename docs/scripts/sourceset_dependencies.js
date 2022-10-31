@@ -1,0 +1,1 @@
+sourceset_dependencies='{":klibregexdsl:dokkaHtml/commonMain":[],":klibregexdsl:dokkaHtml/jsMain":[":klibregexdsl:dokkaHtml/commonMain"],":klibregexdsl:dokkaHtml/jvmMain":[":klibregexdsl:dokkaHtml/commonMain"]}'
